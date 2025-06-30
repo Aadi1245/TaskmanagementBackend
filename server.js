@@ -13,6 +13,7 @@ app.use(express.json());
 app.use(errorHandler);
 app.use("/api/tasks",require("./routes/taskRoutes.js"));
 app.use("/api/user",require("./routes/userRoutes"));
+app.use(errorHandler);
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });

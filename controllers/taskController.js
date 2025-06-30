@@ -46,7 +46,7 @@ const createTask = asyncHandler(async (req, res) => {
 // @access Private
 
 const updateTask = asyncHandler(async (req, res) => {
-      const tasks=await Task.findById(req.params.id);
+      const tasks=await Task.findById({_id: req.params.id});
     if(!tasks){
         res.status(404);
         throw new Error("Contact not found !");

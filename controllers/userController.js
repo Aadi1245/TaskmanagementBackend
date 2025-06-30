@@ -149,10 +149,19 @@ const userLogin = asyncHandler(async (req, res) => {
 
 const updateUser = asyncHandler(async (req, res) => {
   const updates = req.body;
+  const { id } = req.params;
 
-  // Ensure the user is authenticated and attached to req.user (via auth middleware)
-  const user = await User.findById(req.user.id);
+  // Check if the logged-in user is admin
+  const loggedInUser = await User.findById(req.user.id);
+  if (!loggedInUser) {
+    res.status(401);
+    throw new Error("Unauthorized");
+  }
 
+  // Determine which user's data to update:
+  const targetUserId = loggedInUser.isAdmin ? id : req.user.id;
+
+  const user = await User.findById(targetUserId);
   if (!user) {
     res.status(404);
     throw new Error("User not found");
@@ -161,16 +170,19 @@ const updateUser = asyncHandler(async (req, res) => {
   // Update fields if provided
   if (updates.userName) user.userName = updates.userName;
   if (updates.email) user.email = updates.email;
-  if (typeof updates.isAdmin !== "undefined") user.isAdmin = updates.isAdmin;
-  if (typeof updates.isAuthorized !== "undefined") user.isAuthorized = updates.isAuthorized;
 
-  // If user wants to update password
-  if (updates.password) {
-    const salt = await bcript.genSalt(10);
-    user.password = await bcript.hash(updates.password, salt);
+  // Only admin can update these fields
+  if (loggedInUser.isAdmin) {
+    if (typeof updates.isAdmin !== "undefined") user.isAdmin = updates.isAdmin;
+    if (typeof updates.isAuthorized !== "undefined") user.isAuthorized = updates.isAuthorized;
   }
 
-  // Save updated user
+  // Update password if provided
+  if (updates.password) {
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(updates.password, salt);
+  }
+
   const updatedUser = await user.save();
 
   res.status(200).json({
@@ -178,9 +190,10 @@ const updateUser = asyncHandler(async (req, res) => {
     userName: updatedUser.userName,
     email: updatedUser.email,
     isAdmin: updatedUser.isAdmin,
-    isAuthorized: updatedUser.isAuthorized
+    isAuthorized: updatedUser.isAuthorized,
   });
 });
+
 
 // const updateUser = asyncHandler(async (req, res) => {
 //   const updates = { ...req.body };

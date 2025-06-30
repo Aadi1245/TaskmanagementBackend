@@ -8,7 +8,7 @@ router.post("/register",userRegister);
 
 router.post("/login",userLogin);
 
-router.put("/update",validatToken, updateUser);
+router.put("/:id",validatToken, updateUser);
 
 router.post("/unAuthorizedUser",getUnauthorizedUsers);
 

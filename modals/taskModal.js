@@ -7,7 +7,7 @@ const taskSchema=mongoose.Schema({
     },
     title:{
         type:String,
-        required:[true,"Please add the contact name"]
+        required:[true,"Please add the task name"]
     },
     status:{
         type:String,
@@ -15,7 +15,7 @@ const taskSchema=mongoose.Schema({
     },
     description:{
         type:String,
-        required:[true,"Please enter the contact number"]
+        required:[true,"Please enter the task description"]
     },
     priority:{
         type:String,
