@@ -42,7 +42,7 @@ const createTask = asyncHandler(async (req, res) => {
 });
 
 //@desc Update contact
-// @route PUT /api/contacts
+// @route PUT /api/tasks
 // @access Private
 
 const updateTask = asyncHandler(async (req, res) => {
@@ -63,7 +63,7 @@ const updateTask = asyncHandler(async (req, res) => {
 });
 
 //@desc Create contact
-// @route Delete /api/contacts
+// @route Delete /api/tasks
 // @access Private
 
 const deleteTask = asyncHandler(async (req, res) => {
@@ -85,7 +85,7 @@ const deleteTask = asyncHandler(async (req, res) => {
 });
 
 //@desc Create contact
-// @route GET /api/contacts/:id
+// @route GET /api/tasks/:id
 // @access Private
 
 const getTask = asyncHandler(async (req, res) => {
